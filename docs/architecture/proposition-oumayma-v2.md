@@ -107,7 +107,7 @@ Le modèle est chargé depuis MLflow au démarrage de FastAPI, avec une version 
 
 La promotion dans le registre ne met pas automatiquement FastAPI à jour. Les données peuvent être stockées dans un bucket MinIO distinct avec accès limité au Job.
 
-## 5. Observabilité — responsabilité de Marwa
+## 5. Observabilité
 
 ```mermaid
 flowchart TD
