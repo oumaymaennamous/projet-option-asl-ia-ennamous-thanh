@@ -2,7 +2,7 @@
 
 **Projet :** Sujet 4 — Plateforme MLOps : MLflow sur Kubernetes  
 **Date :** 23 octobre 2026  
-**Équipe :** Oumayma Ennamous, Thanh Tu Vo et Marwa  
+**Équipe :** Oumayma Ennamous, Thanh Tu Vo et Marwa Boumour
 **Statut :** proposition à valider en groupe.
 
 Cette V2 complète la [version précédente](proposition-oumayma.md), conservée pour l’historique. Elle intègre l’observabilité confiée à Marwa par le professeur dès le cadrage J1.
@@ -159,6 +159,22 @@ Les métriques ML comme F1 et accuracy restent dans MLflow ; Prometheus suit l�
 
 Les dashboards, configurations de collecte, règles d’alerte et rétentions sont versionnés. Aucune destination externe de notification n’est configurée avant son choix par le groupe.
 
+### Budget ressources observabilité (ordre de grandeur)
+
+| Composant | RAM | CPU | Stockage |
+|---|---|---|---|
+| Prometheus + Alertmanager | ~1 Go | 200–500m | 5–10 Go (retention 7j) |
+| Grafana | ~200 Mo | 100m | 1 Go |
+| node-exporter + kube-state-metrics | ~200 Mo | 100m | — |
+| Loki + Alloy (optionnel) | +1–1.5 Go | 300–500m | 5–10 Go (retention 7j) |
+| **Total minimal** (sans Loki) | **~1.5 Go** | | **~10 Go** |
+| **Total étendu** (avec Loki) | **~3 Go** | | **~20 Go** |
+
+**Go/No-Go Loki** : Loki ne sera déployé que si la RAM disponible
+sur le worker reste ≥ 4 Go après OpenStack + k3s + MLflow + PG + MinIO
++ Prometheus + Grafana. Sinon → plan B : `metrics-server` + logs via
+`kubectl logs` (documenté dans ADR-003).
+
 ## 6. Persistance et sécurité
 
 | Données | Persistance initiale |
@@ -239,10 +255,10 @@ Le README décrit la procédure de A à Z, les prérequis réseau/disques, les v
 ## 10. Décisions et risques à long terme
 
 ADR à formaliser :
-1. K3s comparé à kubeadm, avec plan B.
-2. PostgreSQL et MinIO, stratégie de persistance et sauvegardes, comparés à une alternative.
-3. OpenStack all-in-one comparé aux VM KVM/libvirt.
-4. Si utile, choix de collecte et de rétention des métriques et journaux.
+1. ADR-000 : OpenStack all-in-one vs VM KVM/libvirt
+2. ADR-001 : k3s vs kubeadm
+3. ADR-002 : PostgreSQL + MinIO (persistance, sauvegardes)
+4. ADR-003 : Collecte et rétention métriques/journaux — Prometheus + Grafana    requis ; Loki conditionné par Go/No-Go ressources (≥ 4 Go libres sur    le worker après stack complète).
 
 | Risque majeur | Réponse proposée |
 |---|---|
