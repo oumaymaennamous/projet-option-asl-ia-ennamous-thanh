@@ -32,4 +32,10 @@ with mlflow.start_run(run_name=f"EXP-J3-{args.model}-seed{args.seed}"):
     mlflow.log_metric("rmse", mean_squared_error(yte, pred) ** 0.5)
     mlflow.log_metric("r2", r2_score(yte, pred))
     mlflow.set_tag("git_commit", git_commit())
-    mlflow.sklearn.log_model(m, "model", signature=sig, input_example=Xtr.head(3))
+    mlflow.sklearn.log_model(
+        m,
+        name="model",
+        signature=sig,
+        input_example=Xtr.head(3),
+        skops_trusted_types=["sklearn.tree._tree.Tree"],
+    )
