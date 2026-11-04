@@ -1,0 +1,36 @@
+# versions.yaml : versions figées et testées.
+# Règle : on ne change une version qu'avec une ADR ou une note dans le journal.
+# Chaque valeur « à vérifier » doit être remplacée par la version réellement
+# installée et testée (date + source dans le commentaire).
+
+socle:
+  os_hote: "Ubuntu Server 24.04 LTS"          # imposé par scripts/openstack-aio.py
+  openstack: "2026.1"                          # défini dans scripts/openstack-aio.py
+  kolla_ansible_commit: "6de82f8b4b1794ea4e3b2c8f5ff3649dce0719c7"  # idem
+
+kubernetes:
+  distribution: k3s                            # ADR-001
+  k3s: "à vérifier"                            # ex. v1.xx.y+k3sN ; relever sur le canal stable
+  # Les composants embarqués (Traefik, metrics-server, local-path) suivent
+  # la version de k3s : les noter après installation avec `kubectl get pods -A`.
+
+plateforme:
+  mlflow: "3.18.0"                # testé POC local (2 runs) le 2026-11-04
+  mlflow_chart: "3.18.0"          # vérifié: helm show chart oci://ghcr.io/mlflow/charts/mlflow
+  postgresql: "16"
+  minio: "à vérifier"             # tag RELEASE.AAAA-MM-JJT... exact
+
+observabilite:                                 # ADR-003 (Marwa)
+  prometheus: "à vérifier"
+  grafana: "à vérifier"
+  loki: "conditionnel (Go/No-Go RAM)"
+
+ml:
+  python: "3.12.10"
+  scikit_learn: "1.5.2"
+  mlflow_client: "3.18.0"
+  numpy: "1.26.4"
+  pandas: "2.2.3"
+  sqlalchemy: "2.0.28"
+  scipy: "1.17.1"
+  jeu_de_donnees: "California Housing (sklearn.datasets)"

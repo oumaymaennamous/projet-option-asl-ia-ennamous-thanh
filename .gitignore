@@ -1,6 +1,47 @@
 # Python
 .venv/
+**/.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
 
 # MLflow
 mlruns/
+mlartifacts/
 mlflow.db
+
+# Secrets et identifiants : ne jamais versionner
+.env
+.env.*
+*.pem
+*.key
+*.crt
+secrets*.yaml
+secrets*.yml
+*-secret.yaml
+passwords.yml
+clouds.yaml
+admin-openrc*
+*openrc.sh
+kubeconfig*
+*.kubeconfig
+id_rsa*
+id_ed25519*
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
+
+# Ansible
+*.retry
+.vault_pass*
+
+# Éditeurs et système
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
