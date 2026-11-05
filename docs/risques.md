@@ -1,19 +1,28 @@
 # Registre des risques
 
-Statut : v0, à compléter par chaque pilote. Dernière mise à jour : 2026-11-04.
+Date : 4 novembre 2026. Échelles qualitatives : faible / moyenne / forte. Responsables proposés, à confirmer en groupe. Tous les risques sont ouverts tant que la preuve de maîtrise n'est pas déposée.
 
-| # | Risque | Proba. | Impact | Signe d'alerte | Prévention | Plan B | Responsable |
-|---|---|---|---|---|---|---|---|
-| R1 | OpenStack all-in-one non fonctionnel avant J2 (20/11) | à évaluer | Élevé | `check` ou `prechecks` en échec ; aucune VM créée au [date] | Machine vérifiée tôt ; exécuter `check` dès l'accès | Basculer sur VM KVM/libvirt (ADR-000), date limite [à fixer] | Oumayma |
-| R2 | Machine à une seule interface réseau : le script s'arrête | à évaluer | Élevé | `check` refuse la configuration | Vérifier les interfaces avant tout | Plan réseau spécifique ou KVM/libvirt | Oumayma |
-| R3 | RAM insuffisante pour OpenStack + 2 VM + stack MLOps + monitoring | à évaluer | Élevé | OOM, VM lentes | Dimensionner après vérification de la machine | Une seule VM k3s ; Loki désactivé (Go/No-Go ADR-003) | Oumayma / Marwa |
-| R4 | k3s non fonctionnel sur les VM (nœuds NotReady, DNS) | à évaluer | Moyen | Nœuds non Ready au [date, ADR-001] | Installation testée d'abord en local | kubeadm (ADR-001) | Thanh Tu |
-| R5 | Perte d'un PVC (PostgreSQL ou MinIO) : runs ou artefacts perdus | à évaluer | Élevé | Pod redémarré sans données | Sauvegardes hors VM, restauration testée | Restauration depuis la sauvegarde ; SQLite + volume (ADR-002) | Thanh Tu |
-| R6 | Migration SQLite vers PostgreSQL mal préparée | à évaluer | Moyen | Erreurs au démarrage de MLflow | Tester sur un cluster local avant J3 | Rester sur SQLite temporairement, documenté | Thanh Tu |
-| R7 | Versions non figées : reconstruction non reproductible (J5) | à évaluer | Moyen | Résultat différent d'une installation à l'autre | `versions.yaml`, images et dépendances en cache | Cache local des dépendances et images | Tous |
-| R8 | Secrets commités dans Git | à évaluer | Élevé | Mot de passe visible dans l'historique | `.gitignore`, relecture, Secrets Kubernetes | Révoquer et régénérer les secrets | Tous |
-| R9 | Métriques et journaux saturent le stockage | à évaluer | Moyen | Disque du worker presque plein | Rétention bornée | Réduire la rétention, couper Loki | Marwa |
-| R10 | Retard sur J2 qui décale tout le calendrier | à évaluer | Élevé | Tag j2 absent le lundi 23/11 matin | Avancer en parallèle (k3s en local, Prometheus en local) | Appliquer les plans B des ADR | Tous |
-| R11 | Rôles non validés par tous | à évaluer | Moyen | Désaccord ou travail en double | Validation écrite du plan de travail | Rééquilibrer après J1 | Tous |
+| ID | Risque / déclencheur | Probabilité | Impact | Prévention et plan B | Responsable proposé / preuve |
+|---|---|---|---|---|---|
+| R1 | RAM/CPU insuffisants pour trois VM et entraînements | Moyenne | Fort | Inventaire, réserves hôte, un Job à la fois, requests/limits ; réduire observabilité puis topologie en documentant la perte de HA | Oumayma ; inventaire et mesures |
+| R2 | Panne de la machine physique unique | Moyenne | Fort | Sauvegardes externes et restauration ; répartir sur plusieurs hôtes si disponibles | Oumayma ; test restauration |
+| R3 | Perte quorum etcd / panne de deux serveurs | Moyenne | Fort | Maintenance un nœud à la fois, santé vérifiée, snapshots et token protégé | Thanh Tu ; test panne et retour |
+| R4 | Changement d'IP / point API dépendant d'une VM | Moyenne | Fort | MAC/IP stables, vérification DHCP/DNS ; point API redondant et certificats adaptés | Oumayma ; reboot et accès |
+| R5 | Disques saturés / trois copies impossibles | Moyenne | Fort | Dimensionner Longhorn, disque données si possible, seuils et rétention ; local-path documenté en secours | Thanh Tu ; capacité et santé PVC |
+| R6 | MinIO : image ou dépendance retirée / non maintenue | Forte | Fort | Source/tag/commit, image/digest conservés et reconstruction ; alternative S3 à valider avec l'enseignant | Thanh Tu ; build et pull sur nœud vierge |
+| R7 | Suppression, corruption ou sauvegarde inutilisable | Moyenne | Fort | Sauvegardes SQL et objets hors hôte, restauration testée ; Retain n'est pas une sauvegarde | Thanh Tu ; exercice de restauration |
+| R8 | Secrets dans Git ou interface exposée | Moyenne | Fort | Secrets hors dépôt, droits minimaux, accès privé, HTTPS avant exposition, contrôle des preuves | Oumayma ; revue et tests d'accès |
+| R9 | Fuite de données ML / choix biaisé sur le test | Moyenne | Fort | Pipelines ajustées sur train, sélection sur validation, test final indépendant, graine/empreinte conservées | Thanh Tu ; notebook et runs |
+| R10 | Modèle chargé sans bon prétraitement/seuil/dépendances | Moyenne | Fort | Sauvegarder pipeline complète, contrat d'entrée et versions ; test après rechargement | Thanh Tu ; prédictions identiques |
+| R11 | KServe/Streamlit retardent le MVP obligatoire | Moyenne | Fort | Extensions après J3 ; runtime Standard ou prédicteur personnalisé ; geler extensions si J3 menacé | Oumayma ; checklist J3 |
+| R12 | Observabilité consomme trop / ne voit pas panne hôte | Moyenne | Moyen | Rétention et labels bornés, Loki conditionnel, conservation des preuves hors hôte | Marwa ; mesures avec/sans collecte |
+| R13 | Procédure manuelle impossible à reconstruire | Moyenne | Fort | Scripts et versions dans Git, essais sur VM vierge, revue croisée avant J5 | Tous ; reconstruction filmée |
+| R14 | Formation/charge mal répartie ou indisponibilité membre | Moyenne | Moyen | Rôles et relecteurs, binômage, journal et carnet individuel ; réaffectation lors du point de groupe | Tous ; plan actualisé |
+| R15 | Écart de versions entre client MLflow, serveur et chart Helm. Constaté au POC : MLflow 3.x refuse le stockage par fichiers et exige `skops_trusted_types` pour un RandomForest | Forte | Moyen | Versions client/serveur/chart alignées et figées dans `versions.yaml` ; test complet (run, enregistrement, rechargement) avant J3 ; sinon fixer `image.tag` | Thanh Tu ; `pip freeze` et run de bout en bout sur la version retenue |
+| R16 | Migration SQLite vers PostgreSQL mal préparée : erreurs au démarrage de MLflow | Moyenne | Moyen | Tester sur un cluster local avant J3 ; secrets et URI vérifiés ; SQLite sur volume persistant en secours, limite documentée | Thanh Tu ; démarrage de MLflow sur PostgreSQL |
+| R17 | Retard sur J2 qui décale tout le calendrier. Déclencheur : tag `j2` absent le lundi 23/11 au matin | Moyenne | Fort | Avancer en parallèle (K3s et Prometheus en local) ; appliquer les plans B des ADR ; noter le retard dans le journal | Tous ; état des preuves à J-3 |
+| R18 | Rôles, relecteurs ou ADR non validés par tous : désaccord, travail en double | Moyenne | Moyen | Validation écrite du plan de travail et des ADR ; rééquilibrer après chaque jalon | Tous ; revue de J1 |
+| R19 | Socle KVM/libvirt non confirmé : machines non inventoriées, virtualisation matérielle indisponible ou accès impossible | Moyenne | Fort | Inventaire et test KVM avant tout déploiement ; réduire le nombre de VM ; plan B à compléter dans ADR-000 | Oumayma ; inventaire et résultat du test |
+| R20 | Jeu de données Telco Churn : source, licence ou version non documentées | Moyenne | Moyen | Documenter source, licence, version et empreinte ; conserver California Housing comme jeu de repli du POC | Thanh Tu ; fiche du jeu de données |
 
-Les lignes R1 à R3 et R9 sont des propositions : Oumayma et Marwa doivent les relire et les compléter.
+Révision : à chaque séance et avant chaque jalon. Ne clore un risque qu'avec une preuve référencée et la description du risque résiduel.
