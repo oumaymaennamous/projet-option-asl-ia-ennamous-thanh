@@ -10,6 +10,10 @@ mlruns/
 mlartifacts/
 mlflow.db
 
+# Datasets locaux (téléchargés, non versionnés)
+ml/data/*
+!ml/data/.gitkeep
+
 # Secrets et identifiants : ne jamais versionner
 .env
 .env.*

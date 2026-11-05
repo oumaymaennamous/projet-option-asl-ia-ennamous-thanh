@@ -1,3 +1,4 @@
+# Projet Option ASL-IA
 ## Plateforme MLOps : MLflow sur Kubernetes (Sujet 4)
 
 INSA Centre Val de Loire, 5e année, option ASL-IA, 2026-2027.
@@ -47,7 +48,10 @@ Gel des fonctionnalités : 29/01/2027. Rendu final : 12/02/2027, 18:00.
 ## Réalisé, proposé et restant à faire
 
 **Réalisé (avec preuves à verser dans `docs/jalons/preuves/`) :**
-- POC local MLflow (Thanh Tu) : serveur MLflow local et runs `rf` et `ridge` sur California Housing, captures dans `docs/jalons/preuves/`. Détail et versions : [ml/README.md](ml/README.md).
+- POC local MLflow (Thanh Tu) : serveur MLflow local (client + serveur 3.18.0, SQLite), 4 runs vérifiés :
+  - **Housing** (régression, historique) : `rf` et `ridge`, métriques `rmse` / `r2`
+  - **Churn** (classification, cible J3) : `logreg` et `rf`, métriques `accuracy` / `precision` / `recall` / `f1` / `roc_auc` / `f1_thr_30-50-70`
+  Captures dans `docs/jalons/preuves/` (7 PNG). Détail et versions : [ml/README.md](ml/README.md).
 - Laboratoire VMware (Oumayma) : trois serveurs K3s, Headlamp, Longhorn, PostgreSQL, MinIO et MLflow testés, persistance PostgreSQL et MinIO vérifiée après recréation des pods. Les captures, manifests exacts et sorties ne sont pas encore versés dans ce dépôt.
 
 **Proposé, non validé :**
@@ -58,7 +62,7 @@ Gel des fonctionnalités : 29/01/2027. Rendu final : 12/02/2027, 18:00.
 
 ## Versions MLflow
 
-Les versions du client MLflow, du serveur et du chart Helm doivent rester alignées. Version cible : **3.18.0** (chart `oci://ghcr.io/mlflow/charts/mlflow` vérifié le 04/11/2026 avec `helm show chart`). Le client Python `3.x` doit encore être validé de bout en bout avec `ml/src/train.py` ; les versions réellement testées sont figées dans [versions.yaml](versions.yaml). Décision et règle de compatibilité : [ADR-002](docs/adr/ADR-002-stockage-mlflow.md).
+Les versions du client MLflow, du serveur et du chart Helm doivent rester alignées. Version cible : **3.18.0** (chart `oci://ghcr.io/mlflow/charts/mlflow` vérifié le 04/11/2026 avec `helm show chart`). Le client Python **3.18.0** a été validé de bout en bout le 2026-11-05 avec `ml/src/train.py` (4 runs, expériences `p3-baseline` et `p3-churn`). Les versions réellement testées sont figées dans [versions.yaml](versions.yaml). Décision et règle de compatibilité : [ADR-002](docs/adr/ADR-002-stockage-mlflow.md).
 
 ## Reproductibilité attendue pour J2 à J5
 

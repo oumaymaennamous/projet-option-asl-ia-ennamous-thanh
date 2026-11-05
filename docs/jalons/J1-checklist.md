@@ -13,6 +13,9 @@
 - [x] [Registre des risques](../risques.md).
 - [x] [Planning et répartition proposée](../plan-travail.md).
 - [x] [Journal de préparation documentaire](../journal/2026-11-04.md).
+- [x] Preuves POC MLflow local (4 runs Housing + Churn) : [docs/jalons/preuves/](preuves/) — 7 captures.
+- [x] POC `train.py` dual-dataset (housing + churn) versionné : [ml/src/train.py](../../ml/src/train.py).
+- [x] `versions.yaml` avec versions testées.
 
 ## À terminer avant de déclarer J1 prêt
 
@@ -26,16 +29,16 @@
 
 ## Preuves à verser et emplacement proposé
 
-Créer `docs/preuves/` au moment de déposer des preuves réelles, avec date, contexte et version du code. Les chemins suivants sont **des destinations prévues**, pas des fichiers existants :
+Les preuves sont déposées dans `docs/jalons/preuves/` (déjà créé, 7 captures POC Housing + Churn). Les emplacements ci-dessous sont **des destinations prévues** pour les preuves futures, pas des fichiers existants :
 
 | Preuve | Destination prévue | Usage |
 |---|---|---|
-| Inventaire hôte sans données sensibles | `docs/preuves/inventaire-hote.md` | Dimensionnement et ADR-000 |
-| Compte rendu de revue de groupe | `docs/preuves/revue-j1.md` | Arbitrages et rôles |
-| Architecture exportée et lisible | `docs/preuves/architecture-j1.pdf` | Document 2–3 pages |
-| Trois nœuds et versions du POC | `docs/preuves/poc-k3s.txt` | Contexte, pas preuve de migration KVM |
-| Recréation pods PostgreSQL/MinIO | `docs/preuves/persistance.md` | Préparation J2 |
-| Runs et modèle retenu | `docs/preuves/mlflow.md` | Préparation J3 |
+| Inventaire hôte sans données sensibles | `docs/jalons/preuves/inventaire-hote.md` | Dimensionnement et ADR-000 |
+| Compte rendu de revue de groupe | `docs/jalons/preuves/revue-j1.md` | Arbitrages et rôles |
+| Architecture exportée et lisible | `docs/jalons/preuves/architecture-j1.pdf` | Document 2–3 pages |
+| Trois nœuds et versions du POC | `docs/jalons/preuves/poc-k3s.txt` | Contexte, pas preuve de migration KVM |
+| Recréation pods PostgreSQL/MinIO | `docs/jalons/preuves/persistance.md` | Préparation J2 |
+| Runs et modèle retenu | `docs/jalons/preuves/mlflow.md` | Préparation J3 |
 
 ## Commandes de contrôle en lecture seule
 

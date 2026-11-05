@@ -85,7 +85,7 @@ Date limite de bascule vers le plan B du socle ou du stockage : à fixer dans AD
 | Création des VM et du réseau | libvirt, cloud-init, scripts idempotents | À implémenter |
 | Configuration des VM et de K3s | Ansible | À implémenter |
 | Stockage et applications | Manifestes ou Helm avec versions figées | À importer du POC, relire et tester |
-| Entraînement | Script Python, puis image et Job Kubernetes | POC `train.py` (California Housing) ; script Telco et Job à livrer |
+| Entraînement | Script Python, puis image et Job Kubernetes | train.py housing et churn (baseline, jeu de test) ; pipeline complète, validation et Job à livrer |
 | Exploitation et preuves | Scripts, checklists et `make demo` | À implémenter |
 
 Cette liste annonce des livrables ; elle ne fournit pas de commandes supposées déjà opérationnelles.

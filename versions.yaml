@@ -4,20 +4,20 @@
 # installée et testée (date + source dans le commentaire).
 
 socle:
-  os_hote: "Ubuntu Server 24.04 LTS"          # imposé par scripts/openstack-aio.py
-  openstack: "2026.1"                          # défini dans scripts/openstack-aio.py
-  kolla_ansible_commit: "6de82f8b4b1794ea4e3b2c8f5ff3649dce0719c7"  # idem
+  os_hote: "Ubuntu Server 24.04 LTS"
+  hyperviseur: "QEMU/KVM + libvirt"
 
 kubernetes:
-  distribution: k3s                            # ADR-001
-  k3s: "à vérifier"                            # ex. v1.xx.y+k3sN ; relever sur le canal stable
-  # Les composants embarqués (Traefik, metrics-server, local-path) suivent
-  # la version de k3s : les noter après installation avec `kubectl get pods -A`.
+  distribution: k3s
+  k3s: "à vérifier"
+  topology: "3 servers avec etcd embarqué"
+  storage_class: "longhorn"
+  longhorn: "à vérifier"
 
 plateforme:
-  mlflow: "3.18.0"                # testé POC local (2 runs) le 2026-11-04
+  mlflow: "3.18.0"                # client testé en POC local (4 runs, serveur local 3.18.0) le 2026-11-05 ; serveur du chart à tester
   mlflow_chart: "3.18.0"          # vérifié: helm show chart oci://ghcr.io/mlflow/charts/mlflow
-  postgresql: "16"
+  postgresql: "16"                # à confirmer
   minio: "à vérifier"             # tag RELEASE.AAAA-MM-JJT... exact
 
 observabilite:                                 # ADR-003 (Marwa)
@@ -26,11 +26,19 @@ observabilite:                                 # ADR-003 (Marwa)
   loki: "conditionnel (Go/No-Go RAM)"
 
 ml:
+  dataset_final: "Telco Customer Churn"   # source et licence à documenter (R20)
+  dataset_poc: "California Housing (historique)"
   python: "3.12.10"
   scikit_learn: "1.5.2"
   mlflow_client: "3.18.0"
   numpy: "1.26.4"
   pandas: "2.2.3"
-  sqlalchemy: "2.0.28"
   scipy: "1.17.1"
-  jeu_de_donnees: "California Housing (sklearn.datasets)"
+  skops: "0.16.0"
+  sqlalchemy: "2.0.28"
+  # Vérifié le 2026-11-05 avec pip freeze (Windows, venv ml/.venv) ;
+  # 4 runs OK : housing rf/ridge, churn logreg/rf.
+
+extensions:
+  kserve: "à vérifier (après J3)"
+  streamlit: "à vérifier (après J3)"
