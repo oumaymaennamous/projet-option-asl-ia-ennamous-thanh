@@ -35,7 +35,7 @@ Gel des fonctionnalités : 29/01/2027. Rendu final : 12/02/2027, 18:00.
 
 | Attendu | Document |
 |---|---|
-| Architecture courte et schéma | [Proposition Oumayma V3 (KVM/libvirt)](docs/architecture/proposition-oumayma-v3.md) |
+| Architecture courte et schéma | [Architecture générale J1](docs/architecture/architecture-v0.md) |
 | Choix du socle | [ADR-000 : KVM/libvirt ou OpenStack](docs/adr/ADR-000-socle-kvm-libvirt.md) |
 | Distribution Kubernetes | [ADR-001 : K3s ou kubeadm](docs/adr/ADR-001-k3s-vs-kubeadm.md) |
 | Stockage MLflow | [ADR-002 : PostgreSQL, MinIO et Longhorn](docs/adr/ADR-002-stockage-mlflow.md) |
@@ -79,7 +79,7 @@ README.md            présentation du projet
 versions.yaml        versions figées
 docs/
   adr/               décisions d'architecture (ADR)
-  architecture/      propositions d'architecture (V1, V2, V3)
+  architecture/      architecture générale J1
   archive/openstack/ procédure OpenStack historique (obsolète)
   journal/           journal de séance (AAAA-MM-JJ.md)
   jalons/            checklists et preuves par jalon
@@ -90,7 +90,7 @@ ml/                  POC et code d'entraînement (voir ml/README.md)
 
 ## Historique et chemins conservés
 
-- [V1](docs/architecture/proposition-oumayma.md) et [V2 OpenStack](docs/architecture/proposition-oumayma-v2.md) : propositions historiques, remplacées pour le cadrage courant par la V3.
+- [Propositions V1, V2 et V3](https://github.com/oumaymaennamous/projet-option-asl-ia-ennamous-thanh/tree/373598bca0d0694c221b03503b91ae1011d9541f/docs/architecture) : historique des choix d’architecture.
 - [OpenStack historique](docs/archive/openstack/README.md) : `openstack-aio.py` et sa procédure, conservés pour comparaison, jamais exécutés sur une machine réelle ; ne constituent pas la procédure KVM retenue.
 - [Journal du 23 octobre](docs/journal/2026-10-23.md) : décisions de séance historiques, non réécrites.
 
