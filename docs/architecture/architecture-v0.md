@@ -3,7 +3,7 @@
 **Sujet 4 · Plateforme MLOps avec MLflow sur Kubernetes**  
 **Équipe · Oumayma Ennamous, Thanh Tu Vo et Marwa Boumour**
 
-Ce document synthétise l’[architecture V3](proposition-oumayma-v3.md) pour le cadrage J1. Il décrit la cible commune, du suivi des entraînements à la supervision de la plateforme.
+Ce document présente l’architecture générale retenue pour le cadrage J1. Il décrit la cible commune, du suivi des entraînements à la supervision de la plateforme.
 
 ## 1. Infrastructure cible
 
