@@ -90,8 +90,3 @@ Date limite de bascule vers le plan B du socle ou du stockage : à fixer dans AD
 
 Cette liste annonce des livrables ; elle ne fournit pas de commandes supposées déjà opérationnelles.
 
-## 8. Rituels et suivi
-
-- Revue du plan à la fin de chaque jalon (rééquilibrage des rôles si besoin).
-- Créneaux officiels : [à confirmer dans l'emploi du temps] ; hors créneaux, travail sur temps libre.
-- Canal de communication : [à préciser] ; décisions importantes reportées dans le journal ou dans un ADR.
