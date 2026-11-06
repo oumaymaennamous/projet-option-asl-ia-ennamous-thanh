@@ -24,7 +24,7 @@ flowchart TD
         PG -->|"PVC dédié"| LH["Longhorn · 3 copies par volume"]
         S3 -->|"PVC dédié"| LH
     end
-    subgraph MON["Namespace monitoring · volet Marwa"]
+    subgraph MON["Namespace monitoring "]
         PROM["Prometheus"]
         PROM --> GRAF["Grafana · tableaux de bord"]
         PROM --> AM["Alertmanager · notifications"]
