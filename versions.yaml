@@ -1,0 +1,44 @@
+# versions.yaml : versions figées et testées.
+# Règle : on ne change une version qu'avec une ADR ou une note dans le journal.
+# Chaque valeur « à vérifier » doit être remplacée par la version réellement
+# installée et testée (date + source dans le commentaire).
+
+socle:
+  os_hote: "Ubuntu Server 24.04 LTS"
+  hyperviseur: "QEMU/KVM + libvirt"
+
+kubernetes:
+  distribution: k3s
+  k3s: "à vérifier"
+  topology: "3 servers avec etcd embarqué"
+  storage_class: "longhorn"
+  longhorn: "à vérifier"
+
+plateforme:
+  mlflow: "3.18.0"                # client testé en POC local (4 runs, serveur local 3.18.0) le 2026-11-05 ; serveur du chart à tester
+  mlflow_chart: "3.18.0"          # vérifié: helm show chart oci://ghcr.io/mlflow/charts/mlflow
+  postgresql: "16"                # à confirmer
+  minio: "à vérifier"             # tag RELEASE.AAAA-MM-JJT... exact
+
+observabilite:                                 # ADR-003 (Marwa)
+  prometheus: "à vérifier"
+  grafana: "à vérifier"
+  loki: "conditionnel (Go/No-Go RAM)"
+
+ml:
+  dataset_final: "Telco Customer Churn"   # source et licence à documenter (R20)
+  dataset_poc: "California Housing (historique)"
+  python: "3.12.10"
+  scikit_learn: "1.5.2"
+  mlflow_client: "3.18.0"
+  numpy: "1.26.4"
+  pandas: "2.2.3"
+  scipy: "1.17.1"
+  skops: "0.16.0"
+  sqlalchemy: "2.0.28"
+  # Vérifié le 2026-11-05 avec pip freeze (Windows, venv ml/.venv) ;
+  # 4 runs OK : housing rf/ridge, churn logreg/rf.
+
+extensions:
+  kserve: "à vérifier (après J3)"
+  streamlit: "à vérifier (après J3)"
