@@ -5,7 +5,7 @@
 ## Livrables présents
 
 - [x] Entrée de dépôt : [README](../../README.md).
-- [x] Architecture actuelle KVM/libvirt, avec schémas : [V3](../architecture/proposition-oumayma-v3.md).
+- [x] Architecture actuelle KVM/libvirt, avec schéma : [Architecture générale J1](../architecture/architecture-v0.md).
 - [x] Alternative socle et plan B : [ADR-000](../adr/ADR-000-socle-kvm-libvirt.md).
 - [x] Distribution Kubernetes, alternative et plan B : [ADR-001](../adr/ADR-001-k3s-vs-kubeadm.md).
 - [x] Stockage artefacts/base, alternatives et plan B : [ADR-002](../adr/ADR-002-stockage-mlflow.md).
