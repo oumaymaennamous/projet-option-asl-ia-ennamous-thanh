@@ -42,7 +42,7 @@ flowchart TD
 - **PostgreSQL** conserve les métadonnées de MLflow. **MinIO** fournit le stockage compatible S3 pour les fichiers et modèles dans le bucket `mlflow-artifacts`. Chaque service possède son propre volume persistant. **Longhorn** réplique chaque volume sur trois nœuds distincts. `local-path` reste le plan B si les ressources sont insuffisantes, avec des volumes attachés à leur nœud. Voir l’[ADR-002](../adr/ADR-002-stockage-mlflow.md).
 - **Après J3**, KServe expose une API de prédiction à partir d’une version validée du modèle. Streamlit collecte les informations du client, appelle cette API et affiche la prédiction.
 
-## 3. Observabilité de la plateforme — volet de Marwa
+## 3. Observabilité de la plateforme
 
 **Prometheus** collecte les métriques du cluster et de ses charges. **Grafana** présente l’utilisation CPU/RAM/disque, l’état des pods et des Jobs, et la disponibilité de MLflow. **Alertmanager** transmet les alertes, par exemple lorsqu’un service devient indisponible ou qu’un Job échoue. Les scores des modèles et la comparaison des entraînements restent dans **MLflow**.
 
