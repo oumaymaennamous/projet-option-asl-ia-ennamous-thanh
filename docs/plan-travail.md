@@ -5,7 +5,7 @@
 - Sujet 4 : Plateforme MLOps, MLflow sur Kubernetes
 - Statut : proposé (à valider par les trois membres)
 
-Architecture de référence : KVM/libvirt, trois VM Ubuntu, K3s, Longhorn, PostgreSQL, MinIO, MLflow (voir ADR-000 et la proposition V3). Cette répartition est une proposition, sans présumer d'une validation ni de travaux déjà réalisés par les autres membres.
+Architecture de référence : KVM/libvirt, trois VM Ubuntu, K3s, Longhorn, PostgreSQL, MinIO, MLflow (voir ADR-000 et l’[architecture générale](architecture/architecture-v0.md)). Cette répartition est une proposition, sans présumer d'une validation ni de travaux déjà réalisés par les autres membres.
 
 ## 1. Rôles, suppléances et relectures
 
