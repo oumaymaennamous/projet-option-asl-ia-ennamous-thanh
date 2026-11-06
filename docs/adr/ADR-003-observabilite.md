@@ -181,27 +181,8 @@ Les tests devront être réalisés de manière contrôlée, sans mettre en dange
 
 Aucun de ces critères ne sera déclaré validé avant la réalisation des tests et le dépôt des preuves correspondantes.
 
-## 8. Planification
 
-| Jalon | Travail lié à l'observabilité |
-|---|---|
-| J1 — 06/11/2026 | Définir l'architecture, les outils, les métriques à suivre, les alertes et les risques |
-| J2 — 20/11/2026 | Préparer l'intégration de la supervision avec le cluster et les services de stockage |
-| J3 — 15/12/2026 | Déployer la stack principale et construire les premiers tableaux de bord |
-| J4 — 22/01/2027 | Tester les alertes, provoquer des incidents contrôlés et mesurer les performances de la plateforme |
-| J5 — 05/02/2027 | Finaliser les vérifications, les preuves et la documentation |
-
-## 9. Risques identifiés
-
-| Risque | Conséquence possible | Mesure de réduction |
-|---|---|---|
-| R1 — Ressources insuffisantes | Dégradation des performances de K3s ou des services MLOps | Mesurer la consommation et utiliser le mode dégradé |
-| R2 — Métriques non exposées | Supervision incomplète de certains composants | Vérifier les endpoints et utiliser des exporters ou des sondes adaptés |
-| R3 — Accumulation des métriques et des logs | Saturation du stockage | Définir une durée de rétention et surveiller l'espace disque |
-| R4 — Mauvaise configuration des alertes | Alertes absentes ou trop nombreuses | Tester les règles avec des incidents contrôlés et ajuster les seuils |
-| R5 — Panne de l'hôte physique | Arrêt de la plateforme et de la supervision | Documenter cette limite et conserver les procédures de diagnostic et de restauration |
-
-## 10. Conclusion
+## 8. Conclusion
 
 Le choix de Prometheus, Grafana et Alertmanager fournit un socle cohérent pour superviser les ressources et les services de la plateforme MLOps. Loki et Alloy complètent cette architecture en permettant la centralisation des logs, sous réserve du budget de ressources disponible.
 
