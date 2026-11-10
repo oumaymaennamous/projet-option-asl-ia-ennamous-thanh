@@ -9,15 +9,15 @@ socle:
 
 kubernetes:
   distribution: k3s
-  k3s: "à vérifier"
+  k3s: "v1.37.2+k3s1" # École, 3 nœuds Ready le 2026-11-10
   topology: "3 servers avec etcd embarqué"
   storage_class: "longhorn"
-  longhorn: "à vérifier"
+  longhorn: "v1.13.0" # École, volume V1 à trois répliques testé le 2026-11-10
 
 plateforme:
   mlflow: "3.18.0"                # client testé en POC local (4 runs, serveur local 3.18.0) le 2026-11-05 ; serveur du chart à tester
   mlflow_chart: "3.18.0"          # vérifié: helm show chart oci://ghcr.io/mlflow/charts/mlflow
-  postgresql: "16"                # à confirmer
+  postgresql: "16"                # Tag image testé à l’école le 2026-11-10
   minio: "à vérifier"             # tag RELEASE.AAAA-MM-JJT... exact
 
 observabilite:                                 # ADR-003 (Marwa)
