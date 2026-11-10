@@ -1,0 +1,40 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: longhorn-3copies
+provisioner: driver.longhorn.io
+allowVolumeExpansion: true
+reclaimPolicy: Retain
+parameters:
+  numberOfReplicas: "3"
+  replicaSoftAntiAffinity: "disabled"
+  dataEngine: "v1"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: test-longhorn
+spec:
+  storageClassName: longhorn-3copies
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-longhorn
+spec:
+  containers:
+    - name: test
+      image: busybox:1.37
+      command: ["sleep", "3600"]
+      volumeMounts:
+        - name: donnees
+          mountPath: /data
+  volumes:
+    - name: donnees
+      persistentVolumeClaim:
+        claimName: test-longhorn
