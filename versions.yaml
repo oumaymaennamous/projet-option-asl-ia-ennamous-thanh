@@ -42,3 +42,23 @@ ml:
 extensions:
   kserve: "à vérifier (après J3)"
   streamlit: "à vérifier (après J3)"
+
+minio:
+  source: https://github.com/minio/minio
+  tag: RELEASE.2025-10-15T17-29-55Z
+  commit: 9e49d5e7a648f00e26f2246f4dc28e6b07f8c84a
+  build_method: from_source
+  build_reason: "MinIO ne publie plus d'images officielles (Docker Hub supprimé, Dockerfile.release 410, Dockerfile officiel en dépendance circulaire sur minio/minio:latest)"
+  build_env: "WSL2 Ubuntu, Docker Desktop, Go 1.26.8 (toolchain dépôt : go1.24.8 min.)"
+  binary_check: "ELF 64-bit LSB executable, x86-64, statically linked, stripped, 107 MB"
+  custom_dockerfile: scripts/j2/minio-Dockerfile.custom
+  base_image: alpine:3.22.8
+  image_size: "44 MB content / 167 MB disk"
+  security_note: "Aucun credential dans le Dockerfile ni dans l'image (docker inspect Env = PATH only) ; MINIO_ROOT_USER/PASSWORD fournis au runtime via Secret Kubernetes"
+  digest: sha256:21074a1035bb8416df8c1e5b0c053446125859265adcd1b447b5de17fe47882c
+  healthcheck_verified: "HTTP 200 sur /minio/health/live depuis docker run local"
+  status: built
+  built_at: 2026-11-18
+  built_on: poste personnel Windows (WSL2)
+  distribution: "docker save (42 MB tar) → scp vers n2 → k3s ctr images import sur les 3 VM"
+  j5_limitation: "Import manuel non reproductible → prévoir registry:2 local sur n2:5000 ou CI"
