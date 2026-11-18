@@ -43,6 +43,14 @@ crash.log
 *.retry
 .vault_pass*
 
+#MinIO
+minio-image.tar
+minio   
+*.tar
+*.tar.gz
+*.img
+*.qcow2
+
 # Éditeurs et système
 .vscode/
 .idea/
