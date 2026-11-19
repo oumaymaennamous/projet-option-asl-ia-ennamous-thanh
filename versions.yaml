@@ -18,7 +18,6 @@ plateforme:
   mlflow: "3.18.0"                # client testé en POC local (4 runs, serveur local 3.18.0) le 2026-11-05 ; serveur du chart à tester
   mlflow_chart: "3.18.0"          # vérifié: helm show chart oci://ghcr.io/mlflow/charts/mlflow
   postgresql: "16"                # Tag image testé à l’école le 2026-11-10
-  minio: "à vérifier"             # tag RELEASE.AAAA-MM-JJT... exact
 
 observabilite:                                 # ADR-003 (Marwa)
   prometheus: "à vérifier"

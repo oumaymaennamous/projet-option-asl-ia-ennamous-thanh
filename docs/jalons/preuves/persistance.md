@@ -1,3 +1,27 @@
+# Preuves de persistance — J2
+
+## PostgreSQL — cluster KVM/Longhorn (10/11/2026, session école)
+
+Test réalisé sur n2 (3 VM Ubuntu 24.04, k3s v1.37.2, Longhorn v1.13.0).
+
+- Image : `postgres:16`, StatefulSet `postgres`, namespace `mlops`
+- PVC : `data-postgres-0`, StorageClass `longhorn-3copies`, 2 GiB
+- Test : table `preuve_j2` + 1 ligne, `kubectl delete pod postgres-0`,
+  StatefulSet recrée, requête → `PostgreSQL : donnees conservees`
+- Volume Longhorn : 3 réplicas `running` sur 3 VM distinctes
+
+Preuves : `j2-headlamp-noeuds.png`, `j2-headlamp-apercu.png`, `j2-headlamp-pods.png`.
+
+### Limite partagée n2
+Les 3 réplicas Longhorn sont sur les 3 VM du même hôte `n2` : protège
+d'une panne VM/nœud, pas d'une panne de n2 ni de disque.
+
+## MinIO — cluster n2 (à compléter le 20/11)
+À remplir vendredi après vérification par Oumayma : image tag/digest réellement
+déployés, PVC Longhorn, recréation pod, `aws s3 ls` après recreate.
+
+---
+
 ## MinIO — test persistance local (Docker Desktop, 19/11/2026)
 
 ### Configuration

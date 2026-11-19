@@ -21,6 +21,6 @@ La plateforme suit les entraînements, compare les résultats et gère les versi
 
 **Équipe** · Oumayma Ennamous (infrastructure), Thanh Tu Vo (Kubernetes et chaîne ML), Marwa Boumour (observabilité).
 
-**J2 en cours** · K3s, Longhorn et la persistance PostgreSQL sont validés sur la cible KVM/libvirt. MinIO reste à déployer. [Journal du 10 novembre](docs/journal/2026-11-10.md) · [Scripts et procédure](scripts/j2/README.md)
+**J2 en cours** · K3s, Longhorn, PostgreSQL et MinIO installés sur la cible KVM/libvirt. Preuves de persistance locales et cluster versées. MLflow proxy mode validé localement ; déploiement cluster prévu le 20/11. [Journal du 10 novembre](docs/journal/2026-11-10.md) · [Preuves persistance](docs/jalons/preuves/persistance.md)
 
 [Historique des propositions d’architecture](https://github.com/oumaymaennamous/projet-option-asl-ia-ennamous-thanh/tree/373598bca0d0694c221b03503b91ae1011d9541f/docs/architecture)
