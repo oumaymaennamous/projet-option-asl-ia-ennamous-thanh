@@ -6,6 +6,18 @@ cle="$HOME/.ssh/mlops-j2"
 premier=192.168.122.53
 version=v1.37.2+k3s1
 
+for ip in "$premier" 192.168.122.70 192.168.122.152; do
+  if ! ssh -i "$cle" "ubuntu@$ip" true >/dev/null 2>&1; then
+    echo "VM inaccessible en SSH : $ip." >&2
+    exit 1
+  fi
+  if ssh -i "$cle" "ubuntu@$ip" \
+    '[ -x /usr/local/bin/k3s ] || systemctl list-unit-files k3s.service --no-legend | grep -q "^k3s.service"'; then
+    echo "K3s est déjà installé sur $ip ; refus de réinstaller ou de réinitialiser ce nœud." >&2
+    exit 1
+  fi
+done
+
 ssh -i "$cle" "ubuntu@$premier" \
   "curl -fsSL https://get.k3s.io -o install-k3s.sh &&
    sudo -n env INSTALL_K3S_VERSION='$version' \

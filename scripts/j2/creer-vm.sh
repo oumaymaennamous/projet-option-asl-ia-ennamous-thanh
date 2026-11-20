@@ -3,7 +3,9 @@ set -euo pipefail
 
 # À lancer sur n2, avec un répertoire de travail dédié.
 case "${1:-}" in
-  k3s-server-1|k3s-server-2|k3s-server-3) vm=$1 ;;
+  k3s-server-1) vm=$1; mac=52:54:00:00:ef:17 ;;
+  k3s-server-2) vm=$1; mac=52:54:00:b1:6f:7f ;;
+  k3s-server-3) vm=$1; mac=52:54:00:9a:d2:8e ;;
   *) echo "Usage : bash $0 k3s-server-{1,2,3}" >&2; exit 1 ;;
 esac
 
@@ -20,14 +22,20 @@ if sudo virsh -c qemu:///system dominfo "$vm" >/dev/null 2>&1 ||
 fi
 
 if [ ! -s "$image" ]; then
-  wget -O "$image.part" "https://cloud-images.ubuntu.com/noble/current/$image"
+  if ! wget -O "$image.part" "https://cloud-images.ubuntu.com/noble/current/$image"; then
+    rm -f "$image.part"
+    exit 1
+  fi
   mv "$image.part" "$image"
 fi
 
 mkdir -p "$HOME/.ssh"
 chmod 700 "$HOME/.ssh"
 if [ ! -f "$cle" ]; then
-  ssh-keygen -t ed25519 -f "$cle"
+  ssh-keygen -q -t ed25519 -N "" -f "$cle"
+elif [ ! -s "$cle.pub" ]; then
+  echo "La clé publique $cle.pub est absente ; ne pas régénérer une clé pouvant déjà être utilisée." >&2
+  exit 1
 fi
 
 cle_publique=$(cat "$cle.pub")
@@ -45,6 +53,6 @@ sudo virt-install --connect qemu:///system \
   --name "$vm" --memory 3072 --vcpus 2 \
   --osinfo generic --import \
   --disk "path=$disque,format=qcow2,bus=virtio" \
-  --network network=default,model=virtio \
+  --network "network=default,model=virtio,mac=$mac" \
   --cloud-init "user-data=$config" \
   --noautoconsole
