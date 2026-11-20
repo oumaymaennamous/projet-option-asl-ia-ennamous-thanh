@@ -8,9 +8,8 @@
 - [x] Longhorn 3 réplicas sur 3 VM — `journal/2026-11-10.md`
 - [x] PostgreSQL persistance cluster — `preuves/persistance.md`
 - [x] MinIO persistance locale (volume survit recréation conteneur) — `preuves/persistance.md`
-- [x] MLflow proxy mode + PostgreSQL + MinIO local (f1=0.6075) — `preuves/mlflow-local-postgres.md`
-- [ ] MinIO persistance cluster — à compléter le 20/11
-- [ ] MLflow déployé sur cluster — à compléter le 20/11
+- [x] MinIO persistance cluster 
+- [x] MLflow déployé sur cluster
 
 ## Notes techniques
 
