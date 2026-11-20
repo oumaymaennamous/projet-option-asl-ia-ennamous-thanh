@@ -9,7 +9,8 @@
 - [x] PostgreSQL persistance cluster — `preuves/persistance.md`
 - [x] MinIO persistance locale (volume survit recréation conteneur) — `preuves/persistance.md`
 - [x] MLflow proxy mode + PostgreSQL + MinIO local (f1=0.6075) — `preuves/mlflow-local-postgres.md`
-- [x] MinIO persistance cluster
+- [ ] MinIO persistance cluster — à compléter le 20/11
+- [ ] MLflow déployé sur cluster — à compléter le 20/11
 
 ## Notes techniques
 
