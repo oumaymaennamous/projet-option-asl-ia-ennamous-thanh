@@ -31,6 +31,25 @@ ssh -i ~/.ssh/mlops-j2 ubuntu@192.168.122.53 '
 '
 ```
 
+## 1 bis. Prérequis réseau : résolution DNS (obligatoire)
+
+Le résolveur DNS de l'école (`172.19.0.254`) ne résout pas `ghcr.io` ni `pypi.org` (constaté le 20/11/2026 ; `1.1.1.1` répond correctement). Sans contournement, ni le pull des images externes ni `pip install` ne fonctionnent. Le réglage est **temporaire** : il disparaît au redémarrage d'une VM.
+
+```bash
+for ip in 192.168.122.53 192.168.122.70 192.168.122.152; do
+  ssh -i ~/.ssh/mlops-j2 "ubuntu@$ip" '
+    sudo resolvectl dns ens3 1.1.1.1 &&
+    sudo resolvectl flush-caches &&
+    getent ahostsv4 ghcr.io | head -1 &&
+    getent ahostsv4 pypi.org | head -1
+  '
+done
+ssh -i ~/.ssh/mlops-j2 ubuntu@192.168.122.53 \
+  'sudo k3s kubectl -n kube-system rollout restart deployment/coredns'
+```
+
+Chaque VM doit afficher une adresse pour les deux noms. Solution durable à implémenter avant J5 : DNS fixe dans cloud-init, ou `server=1.1.1.1` dans le dnsmasq du réseau libvirt `default`.
+
 ## 2. Construire l’image locale sur n2
 
 Podman compile MinIO depuis le tag source choisi. L’archive permet d’importer la même image dans le containerd de chaque VM. Ainsi, k3s peut démarrer MinIO sur chacun des trois nœuds à partir de son cache local.
@@ -56,7 +75,7 @@ sudo podman save --format docker-archive -o minio-j2.tar "$image" &&
 ls -lh minio-j2.tar
 ```
 
-L’archive produite pendant le test faisait environ 153 Mo. Le binaire compilé via Go affichait `DEVELOPMENT.GOGET`. Le tag passé à `go install` fixe la version source. Les tags des images de base peuvent évoluer entre deux constructions.
+L’archive produite pendant le test faisait environ 153 Mo. Le binaire affiche DEVELOPMENT.GOGET : le tag passé à go install fixe la version source, mais le commit n’est pas vérifié et les images de base golang:1.24-alpine et alpine:3.23 sont des tags flottants (non épinglés par digest). Limite connue pour J5.
 
 ## 3. Importer l’image sur les trois VM
 
@@ -147,6 +166,15 @@ spec:
             httpGet:
               path: /minio/health/ready
               port: s3
+          livenessProbe:
+            httpGet:
+              path: /minio/health/live
+              port: s3
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests: { cpu: 100m, memory: 256Mi }
+            limits: { memory: 512Mi }
           volumeMounts:
             - name: data
               mountPath: /data
@@ -172,24 +200,7 @@ Le résultat attendu est `minio-0` en `Running` et le PVC `data-minio-0` en `Bou
 
 Le pod de test utilise Python et `boto3`. Le nœud doit pouvoir récupérer l’image Python et le pod doit pouvoir résoudre et joindre PyPI pour installer `boto3`.
 
-### Connectivité utilisée lors de la session
-
-Si nécessaire et si le réseau de l’école autorise ce résolveur, le réglage temporaire utilisé sur les VM est le suivant. Il est à exécuter dans la VM concernée, sur son interface `ens3`. Il peut disparaître après redémarrage.
-
-```bash
-sudo resolvectl dns ens3 1.1.1.1
-sudo resolvectl flush-caches
-getent ahostsv4 registry-1.docker.io
-getent ahostsv4 pypi.org
-```
-
-Lorsque les nœuds résolvent les noms externes mais que les pods n’y arrivent pas, la commande qui a permis à CoreDNS de reprendre la résolution pendant la session était la suivante, depuis `k3s-server-1`. CoreDNS a ensuite démarré sur `k3s-server-2` et un pod de diagnostic y a résolu `pypi.org`.
-
-```bash
-sudo k3s kubectl -n kube-system rollout restart deployment/coredns &&
-sudo k3s kubectl -n kube-system rollout status deployment/coredns --timeout=2m &&
-sudo k3s kubectl -n kube-system get pods -l k8s-app=kube-dns -o wide
-```
+Le pod client vit 1 h (sleep 3600) puis passe en Completed. Les étapes 5 et 6 recréent le pod, donc rien à faire ; pour rejouer seulement l’étape 6 plus d’une heure après, relancer d’abord l’étape 5.
 
 ### Pod client et script de test
 
