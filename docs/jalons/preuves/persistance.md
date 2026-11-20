@@ -16,9 +16,27 @@ Preuves : `j2-headlamp-noeuds.png`, `j2-headlamp-apercu.png`, `j2-headlamp-pods.
 Les 3 réplicas Longhorn sont sur les 3 VM du même hôte `n2` : protège
 d'une panne VM/nœud, pas d'une panne de n2 ni de disque.
 
-## MinIO — cluster n2 (à compléter le 20/11)
-À remplir vendredi après vérification par Oumayma : image tag/digest réellement
-déployés, PVC Longhorn, recréation pod, `aws s3 ls` après recreate.
+## PostgreSQL et MinIO — vérification automatisée sur le cluster n2 (20/11/2026)
+
+Avant le test, les trois VM et les nœuds K3s étaient actifs. Longhorn
+v1.13.0 utilisait la StorageClass `longhorn-3copies` (`Retain`) ; les
+trois volumes observés étaient `healthy`, avec trois réplicas chacun.
+Les PVC `data-postgres-0` et `data-minio-0` étaient `Bound`, chacun de 2 GiB.
+
+Le script `scripts/j2/verifier-persistance.sh --confirm-interruption` a écrit
+des données de preuve, recréé les deux pods StatefulSet, puis relu ces données :
+
+- PostgreSQL : table `preuve_j2_20261120152649_36843`, recréation de
+  `postgres-0`, puis lecture de `PostgreSQL J2 : donnees conservees`.
+- MinIO : objet
+  `s3://mlflow-artifacts/preuves/preuve_j2_20261120152649_36843.txt`,
+  recréation de `minio-0`, puis lecture de `MinIO J2 : donnees conservees`.
+- Résultat du script : les deux rollouts se sont terminés ; le pod client de
+  test a été supprimé après la vérification.
+
+Le test n'a supprimé aucun PVC ni aucune donnée existante. La table de preuve
+et l'objet S3 créés sont conservés dans le cluster. La sortie du terminal N2
+est conservée dans la [capture de persistance du 20/11](j2-persistance-postgres-minio-2026-11-20.png).
 
 ---
 
