@@ -9,16 +9,15 @@ socle:
 
 kubernetes:
   distribution: k3s
-  k3s: "à vérifier"
+  k3s: "v1.37.2+k3s1" # École, 3 nœuds Ready le 2026-11-10
   topology: "3 servers avec etcd embarqué"
   storage_class: "longhorn"
-  longhorn: "à vérifier"
+  longhorn: "v1.13.0" # École, volume V1 à trois répliques testé le 2026-11-10
 
 plateforme:
   mlflow: "3.18.0"                # client testé en POC local (4 runs, serveur local 3.18.0) le 2026-11-05 ; serveur du chart à tester
   mlflow_chart: "3.18.0"          # vérifié: helm show chart oci://ghcr.io/mlflow/charts/mlflow
-  postgresql: "16"                # à confirmer
-  minio: "à vérifier"             # tag RELEASE.AAAA-MM-JJT... exact
+  postgresql: "16"                # Tag image testé à l’école le 2026-11-10
 
 observabilite:                                 # ADR-003 (Marwa)
   prometheus: "à vérifier"
@@ -42,3 +41,23 @@ ml:
 extensions:
   kserve: "à vérifier (après J3)"
   streamlit: "à vérifier (après J3)"
+
+minio:
+  source: https://github.com/minio/minio
+  tag: RELEASE.2025-10-15T17-29-55Z
+  image: localhost/minio-j2:2025-10-15       # image déployée sur le cluster de l'école
+  build_method: "go install @tag, build multi-étapes Podman sur n2"
+  build_reason: "MinIO ne publie plus d'images officielles (Docker Hub supprimé, Dockerfile.release 410, Dockerfile officiel en dépendance circulaire sur minio/minio:latest)"
+  build_image: golang:1.24-alpine            # tag flottant
+  base_image: alpine:3.23                    # tag flottant
+  commit_verified: false                     # le tag fixe la source, pas le commit
+  binary_version: "DEVELOPMENT.GOGET"
+  archive: "minio-j2.tar (~153 Mo), import dans le containerd des 3 VM"
+  image_digest: "sha256:cdfb4432376519bce450409bb4e12660834a87e4d59e0b3678350ca951a5153b"  # k3s ctr images ls, identique sur les 3 nœuds, 2026-11-20
+  secret: minio-secret                       # MINIO_ROOT_USER / MINIO_ROOT_PASSWORD
+  pvc: "data-minio-0, longhorn-3copies, 2Gi"
+  deployed_by: Oumayma
+  deployed_on: 2026-11-18
+  persistence_cluster: "objet preuve-j2.txt relu après suppression de minio-0 (2026-11-18)"
+  j5_limitation: "Import manuel, bases flottantes, DNS contourné à la main : non reproductible. Prévoir registry:2 sur n2:5000 ou CI, bases épinglées par digest."
+  alternative_non_deployee: "Build WSL2 (make build, commit 9e49d5e…, alpine 3.22.8, digest local sha256:21074a10…) testée en Docker local uniquement ; archivée dans docs/archive/minio-wsl2/"
