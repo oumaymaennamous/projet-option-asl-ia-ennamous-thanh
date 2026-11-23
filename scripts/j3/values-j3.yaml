@@ -1,0 +1,47 @@
+# MLflow 3.18.0 sur K3s (J3) : mode proxy, PostgreSQL + MinIO.
+# Aucun secret ici : tout passe par des Secrets Kubernetes.
+image:
+  tag: v3.18.0-full          # digest sha256:a8459ca08b1e8a0dc287b4e226d4e2338f56052d7e2d333a4aa5891be0670919 (psycopg2 + boto3 vérifiés)
+
+fullnameOverride: mlflow
+replicaCount: 1
+
+server:
+  value_options:
+    workers: 1               # défaut du chart : 4, trop lourd pour des nœuds de 3 Gio
+  flag_options:
+    - serve_artifacts
+
+mlflow:
+  backendStoreUriFrom:
+    secretKeyRef:
+      name: mlflow-db
+      key: uri
+  artifactsDestination: s3://mlflow-artifacts
+
+env:
+  - name: MLFLOW_SERVER_ENABLE_JOB_EXECUTION
+    value: "false"
+  - name: MLFLOW_SERVER_JOB_ENABLE_PERIODIC_TASKS
+    value: "false"
+  - name: MLFLOW_S3_ENDPOINT_URL
+    value: http://minio:9000
+  - name: AWS_DEFAULT_REGION
+    value: us-east-1
+  - name: AWS_ACCESS_KEY_ID
+    valueFrom:
+      secretKeyRef:
+        name: minio-secret
+        key: MINIO_ROOT_USER
+  - name: AWS_SECRET_ACCESS_KEY
+    valueFrom:
+      secretKeyRef:
+        name: minio-secret
+        key: MINIO_ROOT_PASSWORD
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    memory: 768Mi
