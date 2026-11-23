@@ -382,9 +382,7 @@ def run_churn_campaign(args):
     ref_dir.mkdir(parents=True, exist_ok=True)
     X_sample = X_test.head(20).copy()
     proba_ref = champion_run["pipeline"].predict_proba(X_sample)
-    X_sample.to_parquet(ref_dir / "verify_sample.parquet", index=False) if False else X_sample.to_json(
-        ref_dir / "verify_sample.json", orient="records", indent=2
-    )
+    X_sample.to_json(ref_dir / "verify_sample.json", orient="records", indent=2)
     np.save(ref_dir / "verify_proba.npy", proba_ref)
     (ref_dir / "verify_meta.json").write_text(
         json.dumps(
