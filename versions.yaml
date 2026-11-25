@@ -30,7 +30,7 @@ observabilite:                                 # ADR-003 (Marwa)
 ml:
   dataset_final: "Telco Customer Churn"
   dataset_source: "https://raw.githubusercontent.com/IBM/telco-customer-churn-on-icp4d/master/data/Telco-Customer-Churn.csv"
-  dataset_license: "IBM Sample Data / Apache-2.0 (miroir GitHub IBM icp4d)"
+  dataset_license: "Apache-2.0 = licence du dépôt IBM (code pattern, archivé le 2024-07-22) ; licence propre aux données non trouvée. Usage pédagogique."
   dataset_sha256: "4cd901efab211ccb154051a93a1ab5e9298e37e8fd29bbf2c097da23cee36017" # vérifié via le run 988f… (2026-11-23)
   dataset_poc: "California Housing (historique)"
   python: "3.12.10"
