@@ -17,6 +17,8 @@
 - [ ] Journaux 27/11, 14/12, 15/12 (25/11 : `journal/2026-11-25.md`)
 - [ ] Licence propre aux données du dataset : non trouvée ; décider avec le groupe de la conserver telle quelle (usage pédagogique)
 - [ ] Merge dans `main` puis tag `j3` (minuscule) avant le 15/12 18 h
+- [ ] DNS pérenne : répliquer `60-dns.yaml` sur `k3s-server-1` et `k3s-server-3` et valider après redémarrage
+- [ ] Décider de la casse des tags (`J2` / `j1`) avant de poser `j3`
 
 ## Limites connues
-- Écart logreg/rf faible, une seule partition ; rechargement testé hors cluster ; DNS contourné à la main (perdu au reboot) ; 3 pods sur `k3s-server-3` ; failover non testé (R3 : diffusé prévu 14/12).
+- Écart logreg/rf faible, une seule partition ; rechargement testé hors cluster ; DNS pérenne validé sur `k3s-server-2` seulement (contournement manuel sur les deux autres) ; 3 pods sur `k3s-server-3` ; failover non testé (R3 : exercice contrôlé prévu le 14/12).

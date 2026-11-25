@@ -50,6 +50,23 @@ ssh -i ~/.ssh/mlops-j2 ubuntu@192.168.122.53 \
 
 Chaque VM doit afficher une adresse pour les deux noms. Solution durable à implémenter avant J5 : DNS fixe dans cloud-init, ou `server=1.1.1.1` dans le dnsmasq du réseau libvirt `default`.
 
+**Solution durable testée sur `k3s-server-2` (25/11/2026).** Fichier `/etc/netplan/60-dns.yaml` (ne pas modifier `50-cloud-init.yaml`, que cloud-init peut régénérer) :
+
+```yaml
+network:
+  version: 2
+  ethernets:
+    ens3:
+      dhcp4-overrides:
+        use-dns: false
+      dhcp6-overrides:
+        use-dns: false
+      nameservers:
+        addresses: [1.1.1.1]
+```
+
+Les deux blocs `*-overrides` sont obligatoires : `networkd` refuse une valeur différente de `use-dns` entre IPv4 et IPv6. Procédure : `sudo chmod 600 /etc/netplan/60-dns.yaml`, `sudo netplan generate`, puis `sudo netplan try`. Validé après redémarrage de la seule `k3s-server-2` ; non appliqué à `k3s-server-1` et `k3s-server-3`. Vérifier avant de redémarrer un nœud que nœuds `Ready` et volumes Longhorn `healthy`.
+
 ## 2. Construire l’image locale sur n2
 
 Podman compile MinIO depuis le tag source choisi. L’archive permet d’importer la même image dans le containerd de chaque VM. Ainsi, k3s peut démarrer MinIO sur chacun des trois nœuds à partir de son cache local.
