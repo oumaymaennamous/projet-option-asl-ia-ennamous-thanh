@@ -110,9 +110,25 @@ models:/m-eb78ee4f9ed644a0aedf3823c5ecc49f instead
 
 ## Preuves versées
 
-- `j3-mlflow-experiment-churn.png` — état du 23/11 : 6 runs comparatifs dans `p3-churn`
-- `j3-mlflow-run-champion.png` — run champion de la campagne initiale
-- `j3-mlflow-registry-champion.png` — registre à la date du 23/11 (v1)
+### Campagne initiale (23/11) — historique v1
+- `j3-mlflow-experiment-churn.png` — expérience `p3-churn`, 6 runs de la campagne initiale
+- `j3-mlflow-run-champion.png` — run v1 (`988f9b53…`), métriques `test_*`
+- `j3-mlflow-registry-champion.png` — registre au 23/11, alias `champion → v1`
+
+### Rejeu (27/11) — état actuel v2
+- `j3-experiments-comparison.png` — expérience `p3-churn`, 12 runs au total
+  (6 du 23/11 + 6 du 27/11), triés par `val_f1`
+- `j3-champion-run.png` — run v2 (`59b0729f…`), métriques `test_*`,
+  tag `selected_champion=true`
+- `j3-registry.png` — registre `telco-churn` au 27/11 : v1 (sans alias),
+  v2 (alias `champion`)
+- `j3-registry-version.png` — détail v2 : tags `val_f1=0.6275`,
+  `test_f1=0.6070`, artifacts `model.skops` + `MLSignature`,
+  description (justification)
+
+**Note :** deux captures du registre existent car le registre a évolué
+entre les deux campagnes (v1 → v2). Les deux états sont conservés pour
+traçabilité. Seule la v2 porte l'alias `champion` depuis le 27/11.
 
 ## Limites
 

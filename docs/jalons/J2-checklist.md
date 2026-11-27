@@ -32,3 +32,13 @@
 - `scripts/j2/minio-Dockerfile.custom` — Dockerfile MinIO custom
 - `scripts/j2/build-minio.sh` — build reproductible
 - `scripts/j2/import-minio.sh` — import sur 3 VM
+
+## Évolution post-J2 (note du 27/11)
+
+Les deux items "à compléter le 20/11" sont désormais **faits** :
+- MinIO déployé sur le cluster le 18/11 — preuves dans `preuves/persistance.md`
+- MLflow déployé sur le cluster le 23/11 — preuves dans `preuves/mlflow.md`
+
+Ces preuves ont été versées dans le cadre du jalon J3 (voir
+`docs/jalons/J3-checklist.md`). Le J2-checklist reste un snapshot
+de l'état au 20/11, non modifié pour traçabilité.
