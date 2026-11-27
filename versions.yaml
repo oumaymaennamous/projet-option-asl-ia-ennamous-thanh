@@ -18,7 +18,7 @@ plateforme:
   mlflow: "3.18.0"                # serveur déployé sur K3s le 2026-11-23 (chart 3.18.0, image v3.18.0-full)
   mlflow_chart: "3.18.0"          # oci://ghcr.io/mlflow/charts/mlflow
   mlflow_image: "ghcr.io/mlflow/mlflow:v3.18.0-full"
-  mlflow_image_digest: "sha256:a8459ca08b1e8a0dc287b4e226d4e2338f56052d7e2d333a4aa5891be0670919"
+  mlflow_image_digest: "sha256:a8459ca08b1e8a0dc287b4e226d4f2338f56052d7e2d333a4aa5891be0670919"
   helm: "v3.22.1"                 # installé sur k3s-server-1, sha256: 896cf63684a42a723d61c980369d6e588330927deb13676ca0d85006dd6da0ea
   postgresql: "16"                # Tag image testé à l’école le 2026-11-10 (schéma MLflow alembic f4a9b2c7d1e6, 73 tables)
 

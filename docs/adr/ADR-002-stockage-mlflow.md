@@ -44,7 +44,7 @@ Points de vigilance : `ReadWriteOnce` ne signifie pas une seule copie de stockag
 
 ## Conséquences
 
-- Migration SQLite vers PostgreSQL à préparer avant J3 et à tester sur un cluster local (risque R16).
+- MLflow a démarré directement sur PostgreSQL le 23/11 (schéma créé par MLflow, `alembic_version = f4a9b2c7d1e6`) ; aucune migration de données SQLite vers PostgreSQL n'a été réalisée (risque R16 clos, résiduel documenté dans `risques.md`).
 - Secrets Kubernetes pour PostgreSQL et MinIO ; aucune valeur dans Git.
 - Mode d'accès aux artefacts : proxy par le serveur MLflow, ce qui évite de distribuer les identifiants MinIO aux clients.
 - Déploiement de MLflow par le chart Helm officiel (voir ci-dessous) ; PostgreSQL et MinIO sont à déployer séparément.
@@ -54,14 +54,13 @@ Points de vigilance : `ReadWriteOnce` ne signifie pas une seule copie de stockag
 
 Vérifié le 2026-11-04 (chart) et le 2026-11-05 (client) :
 
-- **Chart Helm et image serveur (vérifiés le 2026-11-23 sur le cluster n2)** : chart `oci://ghcr.io/mlflow/charts/mlflow` version `3.18.0`, image `ghcr.io/mlflow/mlflow:v3.18.0-full` (`sha256:a8459ca08b1e8a0dc287b4e226d4e2338f56052d7e2d333a4aa5891be0670919`). La présence des pilotes `psycopg2` et `boto3` dans cette image est confirmée ; le schéma PostgreSQL (révision Alembic `f4a9b2c7d1e6`, 73 tables) et le transfert proxy vers `s3://mlflow-artifacts` sont validés en bout en bout.
+- **Chart Helm et image serveur (vérifiés le 2026-11-23 sur le cluster n2)** : chart `oci://ghcr.io/mlflow/charts/mlflow` version `3.18.0`, image `ghcr.io/mlflow/mlflow:v3.18.0-full` (`sha256:a8459ca08b1e8a0dc287b4e226d4f2338f56052d7e2d333a4aa5891be0670919`). La présence des pilotes `psycopg2` et `boto3` dans cette image est confirmée ; le schéma PostgreSQL (révision Alembic `f4a9b2c7d1e6`, 73 tables) et le transfert proxy vers `s3://mlflow-artifacts` sont validés en bout en bout.
 - **Empreinte mémoire et job executor MLflow 3.18** : par défaut, MLflow 3.18 démarre un exécuteur de tâches (`_job_runner` et 8 processus `huey_consumer`, ~155 Mio chacun), portant la consommation à 836–1244 Mio et provoquant des `OOMKilled` sur des nœuds de 3 Gio (~1 Gio disponible par VM). L'ajout de `MLFLOW_SERVER_ENABLE_JOB_EXECUTION=false` et `MLFLOW_SERVER_JOB_ENABLE_PERIODIC_TASKS=false` (avec `workers: 1` et `limits.memory: 768Mi`) ramène l'empreinte mesurée à **424–434 Mio** et **3–5m CPU** sans redémarrage.
 - **Sérialisation `skops` et pipeline complète** : avec un `ColumnTransformer` intégré dans la `Pipeline`, MLflow 3.18.0 exige `skops_trusted_types=["sklearn.compose._column_transformer._RemainderColsList", "sklearn.tree._tree.Tree"]` à l'enregistrement (`log_model`). Au rechargement (`mlflow.sklearn.load_model`), MLflow lit automatiquement cette liste depuis les métadonnées `MLmodel` du modèle enregistré.
 - **Client Python** : MLflow 3.18.0, scikit-learn 1.5.2, skops 0.16.0, pandas 2.2.3, numpy 1.26.4, scipy 1.17.1, SQLAlchemy 2.0.28, Python 3.12.10 (`pip freeze`, détail dans `versions.yaml` et `ml/requirements.txt`).
 - **Constaté au POC local** : MLflow 3.x refuse le stockage par fichiers (`./mlruns`) et exige un backend base de données ; il exige aussi `skops_trusted_types=["sklearn.tree._tree.Tree"]` pour enregistrer un RandomForest (régression ou classification). Le rechargement du modèle dans un Job ou un serving devra être testé avec la même contrainte.
 - **Règle proposée** : chart, image du serveur et client alignés sur la même version, à vérifier à chaque déploiement : `helm show chart oci://ghcr.io/mlflow/charts/mlflow --version X.Y.Z` doit correspondre à `mlflow==X.Y.Z` dans `ml/requirements.txt`. Un écart de versions est un risque (R15) ; il n'a pas été testé.
 - **Configuration du chart prévue** : URI de la base via `mlflow.backendStoreUriFrom` (Secret), identifiants S3 via `env` depuis un Secret, artefacts en mode proxy (`server.flag_options: [serve_artifacts]` et `mlflow.artifactsDestination`).
-- **À vérifier** : présence des pilotes PostgreSQL (psycopg2) et S3 (boto3) dans l’image du serveur MLflow.
 ## Sauvegardes et validation
 
 Sauvegarder PostgreSQL de façon cohérente (par exemple `pg_dump` pour la petite base), les objets et la configuration MinIO et les identifiants (procédure sécurisée), sur une cible indépendante de l'hôte. Les snapshots Longhorn ne suffisent pas. La restauration doit être testée. La cible de sauvegarde est à décider avant J2.

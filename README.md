@@ -21,8 +21,8 @@ La plateforme suit les entraînements, compare les résultats et gère les versi
 
 **Équipe** · Oumayma Ennamous (infrastructure), Thanh Tu Vo (Kubernetes et chaîne ML), Marwa Boumour (observabilité).
 
-**J2** · K3s, Longhorn, PostgreSQL et MinIO sont déployés sur la cible KVM/libvirt (n2). Persistance prouvée sur le cluster pour PostgreSQL (10/11) et MinIO (18/11). MLflow est validé en local (mode proxy, PostgreSQL, MinIO) ; son déploiement sur le cluster est prévu pour J3. [Journal du 10 novembre](docs/journal/2026-11-10.md) · [Preuves persistance](docs/jalons/preuves/persistance.md) · [Procédure MinIO](scripts/j2/minio-j2.md)
+**J2** · K3s, Longhorn, PostgreSQL et MinIO sont déployés sur la cible KVM/libvirt (n2). Persistance prouvée sur le cluster pour PostgreSQL (10/11) et MinIO (18/11). MLflow était validé en local à ce stade (mode proxy, PostgreSQL, MinIO) ; son déploiement sur le cluster est décrit dans le paragraphe J3. [Journal du 10 novembre](docs/journal/2026-11-10.md) · [Preuves persistance](docs/jalons/preuves/persistance.md) · [Procédure MinIO](scripts/j2/minio-j2.md)
 
-**J3** · MLflow 3.18.0 est déployé sur K3s (Helm, mode proxy, PostgreSQL et MinIO). Six runs Telco Churn comparés, modèle `telco-churn` v1 avec alias `champion` (v2 depuis le 27/11). Preuves versées ; tag `j3` posé après revue croisée. [Preuves MLflow](docs/jalons/preuves/mlflow.md) · [Checklist J3](docs/jalons/J3-checklist.md)
+**J3** · MLflow 3.18.0 est déployé sur K3s (Helm, mode proxy, PostgreSQL et MinIO). Campagne Telco Churn (régression logistique et forêt aléatoire, 3 graines) menée le 23/11 et rejouée le 27/11 : 12 runs aux résultats identiques. Modèle `telco-churn` avec alias `champion` (v1 le 23/11, v2 depuis le 27/11). Preuves versées ; tag `j3` à poser après relecture croisée et fusion dans `main`. [Preuves MLflow](docs/jalons/preuves/mlflow.md) · [Campagne et champion](docs/jalons/preuves/experiments-j3.md) · [Checklist J3](docs/jalons/J3-checklist.md)
 
 [Historique des propositions d’architecture](https://github.com/oumaymaennamous/projet-option-asl-ia-ennamous-thanh/tree/373598bca0d0694c221b03503b91ae1011d9541f/docs/architecture)
